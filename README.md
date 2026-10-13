@@ -45,6 +45,12 @@ siga audit your_trades.csv --json          # machine-readable
 The CSV needs one row per trade, chronological, with a P&L column
 (`pnl`, `profit`, `return`, … auto-detected, or `--column name`).
 
+### Verdict rules (non-negotiable)
+
+- **Verdict comes from OOS only.** Full-sample numbers are informational.
+- **OOS n < 30 forces INCONCLUSIVE.** We would rather give no answer than a fake one.
+- **p-values are exact** (t-distribution via incomplete beta), not normal approximations.
+
 ## Quickstart — portfolio
 
 ```bash
