@@ -38,5 +38,5 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# monie runtime state
-.monie/
+# siga runtime state
+.siga/
