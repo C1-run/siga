@@ -249,6 +249,11 @@ def _parse_args(argv) -> argparse.Namespace:
     brief_p = subparsers.add_parser("brief", help="generate portfolio-aware briefing")
     brief_p.add_argument("--out-dir", default=None, help="write briefing to directory")
 
+    # Backtest audit (monie-audit)
+    from monie_audit.cli import add_audit_parser
+
+    add_audit_parser(subparsers)
+
     # Full portfolio subcommand (advanced, with --file)
     _add_portfolio_parser(subparsers)
 
@@ -269,6 +274,10 @@ def _run(args) -> int:
         return _cmd_portfolio_import(args)
     if args.command == "brief":
         return _cmd_briefing(args)
+    if args.command == "audit":
+        from monie_audit.cli import run_audit_cli
+
+        return run_audit_cli(args)
 
     # Full portfolio subcommand
     if args.command == "portfolio":
@@ -289,7 +298,7 @@ def _run(args) -> int:
 def main(argv=None) -> int:
     """Run the briefing once; returns a process exit code."""
     args = _parse_args(argv)
-    if args.command is None and args.lookback_hours < 1:
+    if args.command is None and getattr(args, "lookback_hours", 24) < 1:
         print("error: --lookback-hours must be >= 1", file=sys.stderr)
         return 2
     try:
