@@ -39,6 +39,7 @@ siga portfolio list|value|brief # portfolio-aware daily briefing
 
 | Package | Role |
 |---|---|
+| `siga-trail` | Append-only JSONL audit trail — `--trail` records verdicts |
 | `siga-core` | SQLite state store + async event bus |
 | `siga-common` | Logging, telemetry, test helpers |
 | `siga-book` | Single-frame L2 order book summaries. Zero deps |
@@ -46,7 +47,7 @@ siga portfolio list|value|brief # portfolio-aware daily briefing
 
 ## Verification
 
-- **167 tests**, all passing (pure stdlib except pytest)
+- **176 tests**, all passing (pure stdlib except pytest)
 - **MIT licensed** — copyright Selo <team@c1.run>
 - **Requires:** Python >= 3.11
 
@@ -63,15 +64,15 @@ siga portfolio list|value|brief # portfolio-aware daily briefing
 
 ```bash
 git clone <this-repo> && cd siga-cli
-pip install ./siga-common ./siga-core ./siga-book ./siga-audit ./siga-briefing
+pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing
 ```
 
 For editable development:
 
 ```bash
-pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-audit -e ./siga-briefing
+pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-briefing
 pip install pytest ruff
-pytest siga-common siga-core siga-book siga-audit siga-briefing
+pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing
 ```
 
 ## What's next

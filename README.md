@@ -9,7 +9,8 @@ MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
 
 | Package | What it is |
 |---|---|
-| `siga-audit` | **Backtest audit engine** — OOS verdict, cost sensitivity, small-sample guard. Zero dependencies |
+| `siga-audit` | **Backtest audit engine** — OOS verdict, cost sensitivity, small-sample guard |
+| `siga-trail` | Append-only JSONL audit trail — verdicts are recorded, not just printed. Zero dependencies |
 | `siga-core` | Core types, SQLite state store, and async event bus |
 | `siga-common` | Lightweight utilities — logging, time, telemetry, test helpers |
 | `siga-book` | Single-frame L2 order book summaries. Zero dependencies |
@@ -19,13 +20,13 @@ MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
 
 ```bash
 git clone <this-repo> && cd siga-cli
-pip install ./siga-common ./siga-core ./siga-book ./siga-audit ./siga-briefing
+pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing
 ```
 
 For development (editable installs + test tooling):
 
 ```bash
-pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-audit -e ./siga-briefing
+pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-briefing
 pip install pytest ruff
 ```
 
@@ -40,6 +41,7 @@ siga audit siga-audit/examples/trades_sample.csv
 
 siga audit your_trades.csv --cost-bps 10   # net of round-trip cost
 siga audit your_trades.csv --json          # machine-readable
+siga audit your_trades.csv --trail ~/.siga/audit.jsonl   # verdicts recorded, append-only
 ```
 
 The CSV needs one row per trade, chronological, with a P&L column
@@ -63,7 +65,7 @@ siga portfolio brief                 # portfolio-aware daily briefing
 ## Run the tests
 
 ```bash
-pytest siga-common siga-core siga-book siga-audit siga-briefing
+pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing
 ```
 
 ## Why "verdict, not curves"

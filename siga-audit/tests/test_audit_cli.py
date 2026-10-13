@@ -111,3 +111,19 @@ def test_cli_missing_file(capsys):
     rc = run_audit_cli(_make_args("/nonexistent/trades.csv"))
     assert rc == 2
     assert "not found" in capsys.readouterr().err
+
+
+def test_cli_trail_records_verdict(tmp_path, capsys):
+    import json as _json
+
+    oos = ["t,-25" if i % 3 else "t,10" for i in range(36)]
+    p = _write_csv(tmp_path, ["t,5", "t,-5"] * 42 + oos)
+    trail_path = str(tmp_path / "trail.jsonl")
+    rc = run_audit_cli(_make_args(p, trail=trail_path))
+    assert rc == 0
+    with open(trail_path) as f:
+        entry = _json.loads(f.readline())
+    assert entry["action"] == "audit"
+    assert entry["outcome"] == "FAIL"
+    assert entry["payload"]["n"] == 120
+    assert entry["payload"]["oos_t"] < 0

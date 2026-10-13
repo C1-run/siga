@@ -135,6 +135,8 @@ def add_audit_parser(subparsers) -> None:
                    help=f"out-of-sample fraction (default {DEFAULT_OOS_FRAC})")
     p.add_argument("--min-oos", type=int, default=DEFAULT_MIN_OOS,
                    help=f"minimum OOS trades before any verdict (default {DEFAULT_MIN_OOS})")
+    p.add_argument("--trail", default=None, metavar="PATH",
+                   help="append the verdict to an audit trail (JSONL) at PATH")
     p.add_argument("--json", action="store_true", help="print machine-readable JSON")
 
 
@@ -166,6 +168,20 @@ def run_audit_cli(args: argparse.Namespace) -> int:
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+
+    if getattr(args, "trail", None):
+        from siga_trail import Trail
+
+        Trail(args.trail).record(
+            "audit",
+            payload={
+                "file": args.csv,
+                "n": res.full.n,
+                "oos_t": round(res.oos.t, 4),
+                "oos_p": round(res.oos.p, 6),
+            },
+            outcome=res.verdict,
+        )
 
     if args.json:
         print(json.dumps(res.to_dict(), indent=2))
