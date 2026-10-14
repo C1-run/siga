@@ -9,7 +9,7 @@ description = "Data connectors for siga — pull trade history from exchanges, D
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
-authors = [{name = "Selo", email = "team@c1.run"}]
+authors = [{name = "siga", email = "team@c1.run"}]
 keywords = ["crypto", "trading", "binance", "dune", "helius", "data"]
 classifiers = [
     "Development Status :: 4 - Beta",

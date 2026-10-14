@@ -9,7 +9,7 @@ description = "Core types, SQLite state store, and async event bus"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
-authors = [{name = "Selo", email = "team@c1.run"}]
+authors = [{name = "siga", email = "team@c1.run"}]
 keywords = ["event-bus", "state-store", "trading", "python"]
 classifiers = [
     "Development Status :: 4 - Beta",

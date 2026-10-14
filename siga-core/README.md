@@ -44,4 +44,4 @@ await bus.publish("signal", {"symbol": "BTC/USDC"})
 
 ## License
 
-MIT — Selo <team@c1.run>
+MIT — siga <team@c1.run>

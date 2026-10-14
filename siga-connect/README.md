@@ -52,4 +52,4 @@ print(result.source)   # "binance:BTCUSDT"
 
 ## License
 
-MIT — Selo <team@c1.run>
+MIT — siga <team@c1.run>

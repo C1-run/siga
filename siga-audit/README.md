@@ -18,4 +18,4 @@ Rules, non-negotiable:
 - OOS n < 30 forces `INCONCLUSIVE`. We would rather give no answer than a fake one.
 - p-values are exact (t-distribution via incomplete beta), not normal approximations.
 
-MIT — Selo <team@c1.run>
+MIT — siga <team@c1.run>

@@ -9,7 +9,7 @@ description = "Portfolio-aware daily briefing — know what affects your holding
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
-authors = [{name = "Selo", email = "team@c1.run"}]
+authors = [{name = "siga", email = "team@c1.run"}]
 keywords = ["crypto", "portfolio", "briefing", "trading", "solana"]
 classifiers = [
     "Development Status :: 4 - Beta",

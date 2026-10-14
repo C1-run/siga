@@ -97,4 +97,4 @@ The paid product is the **audit verdict** — see the main [siga-cli](..) repo.
 
 ## License
 
-MIT — Selo <team@c1.run>
+MIT — siga <team@c1.run>

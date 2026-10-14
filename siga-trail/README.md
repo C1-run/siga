@@ -16,4 +16,4 @@ than no trail at all.
 Design lineage: oneclaw's `audit.rs` (Mutex-guarded JSONL append), hardened
 with per-record fsync and parameterized paths.
 
-MIT — Selo <team@c1.run>
+MIT — siga <team@c1.run>

@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Backtest audit engine — out-of-sample verdict, cost sensitivity, small-sample guard. Zero dependencies."
 readme = "README.md"
 license = {text = "MIT"}
-authors = [{name = "Selo", email = "team@c1.run"}]
+authors = [{name = "siga", email = "team@c1.run"}]
 requires-python = ">=3.11"
 keywords = ["backtest", "audit", "statistics", "trading", "out-of-sample"]
 classifiers = [

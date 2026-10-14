@@ -43,4 +43,4 @@ These are generic utilities with zero domain coupling. Use them in any project.
 
 ## License
 
-MIT — Selo <team@c1.run>
+MIT — siga <team@c1.run>

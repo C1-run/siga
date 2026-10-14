@@ -51,7 +51,7 @@ siga portfolio list|value|brief # portfolio-aware daily briefing
 ## Verification
 
 - **192 tests**, all passing (pure stdlib except pytest; siga-connect adds httpx)
-- **MIT licensed** — copyright Selo <team@c1.run>
+- **MIT licensed** — copyright siga <team@c1.run>
 - **Requires:** Python >= 3.11
 
 ## Known limitations
