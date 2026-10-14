@@ -1,5 +1,8 @@
 # siga-cli
 
+[![CI](https://github.com/YOUR_ORG/siga-cli/workflows/CI/badge.svg)](https://github.com/YOUR_ORG/siga-cli/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Open-source core of the **siga** audit engine — Honesty / Reproducibility / Verdict.
 
 We audit trading strategies and publish verdicts, not curves. This repo is the free,
