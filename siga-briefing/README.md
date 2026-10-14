@@ -1,8 +1,6 @@
 # siga-briefing
 
-**Portfolio-aware daily briefing — know what affects your holdings in 5 minutes.**
-
-Stop spending 45 minutes every morning flipping through Twitter, news, and exchange apps. Siga tells you exactly what matters to *your* portfolio.
+Portfolio-aware daily briefing. Know what affects your holdings in 5 minutes — not 45.
 
 ## Quick Start
 
@@ -85,18 +83,11 @@ print(briefing.render_markdown())
 - 60s in-memory cache
 - Offline mode: `SIGA_PRICE_SOURCE=stub siga brief`
 
-## What's Included vs Paid
+## What's Included
 
-| Feature | Open Source | Paid ($19/mo) |
-|---------|:-----------:|:-------------:|
-| Holdings P&L | ✅ | ✅ |
-| 24h / 7d changes | ✅ | ✅ |
-| Risk flags | ✅ | ✅ |
-| Fear & Greed | ✅ | ✅ |
-| Telegram push | — | ✅ |
-| Daily action list | — | ✅ |
-| Event calendar | — | ✅ |
-| Auto-push at 8:30am | — | ✅ |
+Everything above is open source, free forever. There is no paid tier for this CLI.
+
+The paid product is the **audit verdict** — see the main [siga-cli](..) repo.
 
 ## Design Principles
 
@@ -106,4 +97,4 @@ print(briefing.render_markdown())
 
 ## License
 
-[Apache-2.0](LICENSE)
+MIT — Selo <team@c1.run>

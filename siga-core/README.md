@@ -44,4 +44,4 @@ await bus.publish("signal", {"symbol": "BTC/USDC"})
 
 ## License
 
-[Apache-2.0](LICENSE)
+MIT — Selo <team@c1.run>

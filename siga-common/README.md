@@ -43,4 +43,4 @@ These are generic utilities with zero domain coupling. Use them in any project.
 
 ## License
 
-[Apache-2.0](LICENSE)
+MIT — Selo <team@c1.run>
