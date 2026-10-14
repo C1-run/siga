@@ -1,6 +1,6 @@
 # siga-cli
 
-[![CI](https://github.com/c1-run/siga-cli/workflows/CI/badge.svg)](https://github.com/c1-run/siga-cli/actions)
+[![CI](https://github.com/c1-run/siga/workflows/CI/badge.svg)](https://github.com/c1-run/siga/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Open-source core of the **siga** audit engine — Honesty / Reproducibility / Verdict.
@@ -23,7 +23,7 @@ MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
 ## Install
 
 ```bash
-git clone https://github.com/c1-run/siga-cli && cd siga-cli
+git clone https://github.com/c1-run/siga && cd siga
 pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing
 
 # optional: data source connectors (binance, dune, helius)

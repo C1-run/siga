@@ -66,7 +66,7 @@ siga portfolio list|value|brief # portfolio-aware daily briefing
 ## Install
 
 ```bash
-git clone https://github.com/c1-run/siga-cli && cd siga-cli
+git clone https://github.com/c1-run/siga && cd siga
 pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing ./siga-connect
 ```
 
