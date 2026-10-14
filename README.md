@@ -5,6 +5,8 @@
 
 Open-source core of the **siga** audit engine — Honesty / Reproducibility / Verdict.
 
+![siga audit demo](docs/demo.gif)
+
 We audit trading strategies and publish verdicts, not curves. This repo is the free,
 MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
 
