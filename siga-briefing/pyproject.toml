@@ -33,6 +33,9 @@ dev = [
     "pytest>=7.0",
     "ruff>=0.1",
 ]
+connect = [
+    "siga-connect",
+]
 
 [tool.setuptools.packages.find]
 include = ["siga_briefing*"]

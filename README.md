@@ -18,12 +18,16 @@ MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
 | `siga-common` | Lightweight utilities — logging, time, telemetry, test helpers |
 | `siga-book` | Single-frame L2 order book summaries. Zero dependencies |
 | `siga-briefing` | The `siga` CLI — portfolio-aware daily briefing |
+| `siga-connect` | Data connectors — pull trade history from Binance, Dune, Helius (optional) |
 
 ## Install
 
 ```bash
 git clone <this-repo> && cd siga-cli
 pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing
+
+# optional: data source connectors (binance, dune, helius)
+pip install ./siga-connect
 ```
 
 For development (editable installs + test tooling):
@@ -56,6 +60,25 @@ The CSV needs one row per trade, chronological, with a P&L column
 - **OOS n < 30 forces INCONCLUSIVE.** We would rather give no answer than a fake one.
 - **p-values are exact** (t-distribution via incomplete beta), not normal approximations.
 
+## Quickstart — pull from a data source
+
+```bash
+# Binance (public market data)
+siga fetch --from binance --symbol BTCUSDT --output btc_trades.csv
+
+# Binance (your actual trades, requires API key)
+siga fetch --from binance --symbol BTCUSDT --api-key $KEY --api-secret $SECRET --output my_trades.csv
+
+# Dune (query results)
+siga fetch --from dune --query-id 12345 --api-key $DUNE_KEY --output trades.csv
+
+# Helius (Solana address)
+siga fetch --from helius --address $SOL_ADDR --api-key $HELIUS_KEY --output trades.csv
+
+# Audit directly without saving CSV
+siga audit --from binance --symbol BTCUSDT --api-key $KEY --api-secret $SECRET
+```
+
 ## Quickstart — portfolio
 
 ```bash
@@ -68,7 +91,7 @@ siga portfolio brief                 # portfolio-aware daily briefing
 ## Run the tests
 
 ```bash
-pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing
+pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing siga-connect
 ```
 
 ## Why "verdict, not curves"

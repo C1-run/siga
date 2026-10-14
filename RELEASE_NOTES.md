@@ -31,6 +31,8 @@ portion**, and prints a verdict. No normal approximations, no hidden parameters.
 
 ```
 siga audit <trades.csv>         # backtest audit
+siga audit --from binance --symbol BTCUSDT --api-key $KEY --api-secret $SECRET
+siga fetch --from binance --symbol BTCUSDT -o trades.csv   # pull to CSV first
 siga portfolio add <sym> <qty>  # manage holdings
 siga portfolio list|value|brief # portfolio-aware daily briefing
 ```
@@ -44,10 +46,11 @@ siga portfolio list|value|brief # portfolio-aware daily briefing
 | `siga-common` | Logging, telemetry, test helpers |
 | `siga-book` | Single-frame L2 order book summaries. Zero deps |
 | `siga-briefing` | `siga` CLI umbrella — portfolio management + news briefing |
+| `siga-connect` | Data connectors — Binance, Dune, Helius (optional) |
 
 ## Verification
 
-- **176 tests**, all passing (pure stdlib except pytest)
+- **192 tests**, all passing (pure stdlib except pytest; siga-connect adds httpx)
 - **MIT licensed** — copyright Selo <team@c1.run>
 - **Requires:** Python >= 3.11
 
@@ -64,15 +67,15 @@ siga portfolio list|value|brief # portfolio-aware daily briefing
 
 ```bash
 git clone <this-repo> && cd siga-cli
-pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing
+pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing ./siga-connect
 ```
 
 For editable development:
 
 ```bash
-pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-briefing
+pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-briefing -e ./siga-connect
 pip install pytest ruff
-pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing
+pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing siga-connect
 ```
 
 ## What's next
@@ -84,4 +87,4 @@ has killed a real strategy first.
 ## Changelog
 
 - **v0.1.0** (2026-10-14) — Initial release. `siga audit` command, portfolio
-  management, five packages, 167 tests.
+  management, data connectors (Binance, Dune, Helius), seven packages, 192 tests.

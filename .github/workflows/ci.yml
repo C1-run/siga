@@ -24,9 +24,9 @@ jobs:
 
       - name: Install packages
         run: |
-          pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-briefing
+          pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-briefing -e ./siga-connect
           pip install pytest
 
       - name: Run tests
         run: |
-          pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing
+          pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing siga-connect

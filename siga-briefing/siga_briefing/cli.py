@@ -174,6 +174,51 @@ def _cmd_briefing(args) -> int:
     return 0
 
 
+def _cmd_fetch(args) -> int:
+    """Fetch trade history from a data source and write to CSV."""
+    try:
+        from siga_connect import fetch_trades
+    except ImportError:
+        print(
+            "error: fetch requires siga-connect. Install with: pip install siga-connect",
+            file=sys.stderr,
+        )
+        return 2
+
+    try:
+        result = fetch_trades(
+            args.source,
+            symbol=getattr(args, "symbol", None),
+            query_id=getattr(args, "query_id", None),
+            address=getattr(args, "address", None),
+            api_key=getattr(args, "api_key", None),
+            api_secret=getattr(args, "api_secret", None),
+            limit=getattr(args, "limit", 500),
+        )
+    except Exception as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+
+    # Write CSV in the format siga audit expects
+    import csv as csv_mod
+
+    fieldnames = ["pnl"]
+    if result.notional is not None:
+        fieldnames.append("notional")
+
+    with open(args.output, "w", newline="", encoding="utf-8") as f:
+        writer = csv_mod.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for i in range(result.n_trades):
+            row = {"pnl": result.pnl[i]}
+            if result.notional is not None:
+                row["notional"] = result.notional[i]
+            writer.writerow(row)
+
+    print(f"[siga-fetch] wrote {result.n_trades} trades from {result.source} to {args.output}", file=sys.stderr)
+    return 0
+
+
 # ---------------------------------------------------------------------------
 # Portfolio subcommand parser
 # ---------------------------------------------------------------------------
@@ -254,6 +299,20 @@ def _parse_args(argv) -> argparse.Namespace:
 
     add_audit_parser(subparsers)
 
+    # Data source fetch (siga-connect, optional)
+    fetch_p = subparsers.add_parser(
+        "fetch", help="pull trade history from a data source into a CSV"
+    )
+    fetch_p.add_argument("--from", dest="source", required=True,
+                         help="data source: binance, dune, helius")
+    fetch_p.add_argument("--symbol", default=None, help="trading pair (binance)")
+    fetch_p.add_argument("--query-id", type=int, default=None, help="Dune query ID")
+    fetch_p.add_argument("--address", default=None, help="Solana address (helius)")
+    fetch_p.add_argument("--api-key", default=None, help="API key")
+    fetch_p.add_argument("--api-secret", default=None, help="API secret (binance)")
+    fetch_p.add_argument("--output", "-o", required=True, help="output CSV path")
+    fetch_p.add_argument("--limit", type=int, default=500, help="max records (default 500)")
+
     # Full portfolio subcommand (advanced, with --file)
     _add_portfolio_parser(subparsers)
 
@@ -278,6 +337,8 @@ def _run(args) -> int:
         from siga_audit.cli import run_audit_cli
 
         return run_audit_cli(args)
+    if args.command == "fetch":
+        return _cmd_fetch(args)
 
     # Full portfolio subcommand
     if args.command == "portfolio":

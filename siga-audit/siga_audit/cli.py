@@ -125,7 +125,17 @@ def add_audit_parser(subparsers) -> None:
     p = subparsers.add_parser(
         "audit", help="audit a backtest trade log (CSV) and print a verdict"
     )
-    p.add_argument("csv", help="path to trades CSV (one row per trade, chronological)")
+    p.add_argument("csv", nargs="?", default=None,
+                   help="path to trades CSV (one row per trade, chronological). "
+                        "Not needed if --from is used.")
+    p.add_argument("--from", dest="source", default=None, metavar="SOURCE",
+                   help="pull trades directly from a data source: binance, dune, helius. "
+                        "Requires siga-connect (pip install siga-connect).")
+    p.add_argument("--symbol", default=None, help="trading pair (required for binance)")
+    p.add_argument("--query-id", type=int, default=None, help="Dune query ID (required for dune)")
+    p.add_argument("--address", default=None, help="Solana address (required for helius)")
+    p.add_argument("--api-key", default=None, help="API key (dune, helius, or binance private)")
+    p.add_argument("--api-secret", default=None, help="API secret (binance private)")
     p.add_argument("--column", default=None, help="name of the P&L column (auto-detected by default)")
     p.add_argument("--cost", type=float, default=None,
                    help="assumed fixed cost per trade (same units as P&L)")
@@ -142,7 +152,35 @@ def add_audit_parser(subparsers) -> None:
 
 def run_audit_cli(args: argparse.Namespace) -> int:
     try:
-        pnl, notional = load_trades_csv(args.csv, args.column)
+        if getattr(args, "source", None):
+            # Pull from a data source via siga-connect (optional dependency)
+            try:
+                from siga_connect import fetch_trades
+            except ImportError:
+                print(
+                    "error: --from requires siga-connect. "
+                    "Install with: pip install siga-connect",
+                    file=sys.stderr,
+                )
+                return 2
+            fetch_result = fetch_trades(
+                args.source,
+                symbol=getattr(args, "symbol", None),
+                query_id=getattr(args, "query_id", None),
+                address=getattr(args, "address", None),
+                api_key=getattr(args, "api_key", None),
+                api_secret=getattr(args, "api_secret", None),
+            )
+            pnl = fetch_result.pnl
+            notional = fetch_result.notional
+            source_desc = fetch_result.source
+        else:
+            if not args.csv:
+                print("error: either provide a CSV file or use --from to pull from a data source", file=sys.stderr)
+                return 2
+            pnl, notional = load_trades_csv(args.csv, args.column)
+            source_desc = args.csv
+
         cost = args.cost
         if args.cost_bps is not None:
             if notional is None:
@@ -175,7 +213,7 @@ def run_audit_cli(args: argparse.Namespace) -> int:
         Trail(args.trail).record(
             "audit",
             payload={
-                "file": args.csv,
+                "file": args.csv or source_desc,
                 "n": res.full.n,
                 "oos_t": round(res.oos.t, 4),
                 "oos_p": round(res.oos.p, 6),
@@ -186,5 +224,5 @@ def run_audit_cli(args: argparse.Namespace) -> int:
     if args.json:
         print(json.dumps(res.to_dict(), indent=2))
     else:
-        print(render_text(res, args.csv, args.oos))
+        print(render_text(res, source_desc, args.oos))
     return 0
