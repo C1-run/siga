@@ -109,6 +109,31 @@ flattering answer**, especially the ones nobody wants to hear:
 - p-values are exact, not normal approximations — because small samples are
   exactly where the lie usually hides.
 
+### The uncomfortable question: why is any of this open source?
+
+Fair question. A lot of open-source trading tools are open-source *because* they
+have no alpha — the code becomes the product when the strategy isn't. We'd rather
+say it ourselves than let you wonder.
+
+So, plainly:
+
+- **What's open here is the measurement machinery, not any alpha.** The audit
+  checks, the verdict rules, the discipline. If our own strategies die under
+  them, that's the tool working, not failing.
+- **What's not open is whatever survived.** Strategies that pass the audit don't
+  get published — they get traded. That asymmetry is the whole business model,
+  and it's also why the verdicts are trustworthy: we charge for what survives,
+  so we can't afford to grade ourselves leniently.
+
+And the practical advice, since it saves you the most money:
+
+**Don't build the giant repo first.** The most expensive mistake in this space
+isn't a losing strategy — it's spending six months building infra (executors,
+dashboards, risk engines) around a strategy that was never real. Audit the trade
+log first: one CSV, one command. If the verdict is FAIL, you just saved yourself
+the infra. That's the highest-ROI hour in quantitative trading.
+
+**Measure before you build.**
 
 ## License
 
