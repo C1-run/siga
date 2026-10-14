@@ -111,27 +111,27 @@ flattering answer**, especially the ones nobody wants to hear:
 
 ### The uncomfortable question: why is any of this open source?
 
-Fair question. A lot of open-source trading tools are open *because* they have
-no alpha — when the strategy isn't the product, the code has to be. We'd rather
-say it ourselves than let you wonder.
+Fair question, and worth answering head-on: a lot of open-source trading tools
+are open *because* they have no alpha. When the strategy isn't the product, the
+code has to be. We'd rather say it ourselves than let you wonder.
 
 So, plainly:
 
-- **What's open here is the measurement machinery, not the alpha.** The checks,
-  the verdict rules, the discipline. Our own strategies died under them — that's
-  the tool working, not failing.
-- **What's closed is whatever survived.** A strategy that passes the audit
-  doesn't get published; it gets traded. That asymmetry is the business model —
-  and the reason the verdicts are honest. We charge for what survives, so we
-  can't afford to go easy on the grading.
+- **Open: the measurement machinery.** The checks, the verdict rules, the
+  discipline. Four of our own strategies died under them. That's not a confession
+  — that's the product demo.
+- **Closed: whatever survived.** A strategy that passes the audit doesn't get
+  published; it gets traded. That asymmetry is the business model, and it's also
+  your quality guarantee: we charge for what survives, so we can't afford to go
+  easy on the grading.
 
 One piece of advice, because it will save you the most money:
 
 **Don't build the giant repo first.** The most expensive mistake in this field
 isn't a losing strategy — it's six months of infra (executors, dashboards, risk
 engines) built around a strategy that was never real. Audit the trade log first:
-one CSV, one command. A FAIL verdict is the cheapest possible outcome — you just
-skipped the infra. That's the highest-ROI hour in quantitative trading.
+one CSV, one command, one hour. A FAIL verdict is the cheapest possible outcome —
+you just skipped the infra. That's the highest-ROI hour in quantitative trading.
 
 **Measure before you build.**
 
