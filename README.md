@@ -78,6 +78,38 @@ this toolchain exists because it killed something we believed in.
 Verdicts are **PASS / FAIL / INCONCLUSIVE** — small samples force INCONCLUSIVE.
 No third kind of talk.
 
+### siga is a linter, not an engine
+
+Every other tool answers *"how do I backtest?"* — backtrader, vectorbt, freqtrade
+and QuantStats give you engines, indicators, charts, and speed. siga answers a
+different question: **"is this backtest actually real?"**
+
+That's why it's not a competitor to those projects — it's a complement. Its input
+is a plain trade log, so it audits the output of *any* backtester:
+
+```bash
+# backtrader / vectorbt / Excel → a CSV → a verdict
+siga audit whatever_you_ran.csv
+```
+
+The closer analogy is a linter: `pylint` never runs your code, it judges it.
+`siga` never runs your strategy, it judges it.
+
+### Why the big projects can't give you a verdict
+
+Neutral tools can't afford to say "your strategy is fake" — it alienates the
+users they depend on for adoption. Their business model rewards engagement; ours
+rewards being right. So the differentiation here isn't a cleverer statistic
+(OOS splits and t-tests are textbook). It's a discipline: **refusing to give a
+flattering answer**, especially the ones nobody wants to hear:
+
+- `OOS n < 30` → INCONCLUSIVE. We would rather give no answer than a fake one.
+- The verdict comes from out-of-sample data only. Full-sample numbers are noise
+  dressed as evidence.
+- p-values are exact, not normal approximations — because small samples are
+  exactly where the lie usually hides.
+
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
