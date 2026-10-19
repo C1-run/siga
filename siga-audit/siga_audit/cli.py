@@ -104,10 +104,16 @@ def render_text(res: AuditResult, source: str, oos_frac: float) -> str:
             f"net mean {fmt_money(net.mean)}, t={net.t:+.2f}, p={fmt_p(net.p)}"
         )
     else:
-        lines.append(
-            f"CHECK 02  Cost sensitivity .... gross edge {fmt_money(res.breakeven_cost)}/trade — "
-            "any round-trip cost above this kills it"
-        )
+        if res.breakeven_cost > 0:
+            lines.append(
+                f"CHECK 02  Cost sensitivity .... breakeven {fmt_money(res.breakeven_cost)}/trade — "
+                "any round-trip cost above this kills the edge"
+            )
+        else:
+            lines.append(
+                f"CHECK 02  Cost sensitivity .... gross edge {fmt_money(res.breakeven_cost)}/trade — "
+                "already negative before any cost"
+            )
     guard = (
         f"OOS n={res.oos.n} >= {res.min_oos} (ok)"
         if res.oos.n >= res.min_oos

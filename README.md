@@ -43,11 +43,26 @@ pip install pytest ruff
 
 ```bash
 siga audit siga-audit/examples/trades_sample.csv
-# → Full sample   n=120  mean=-6.89   (informational only — never the verdict)
-# → IS  (70%)     n=84   mean=+5.04   t=+0.89  p=0.3778
-# → OOS (30%)     n=36   mean=-34.75  t=-3.45  p=0.0015
-# → VERDICT: FAIL — OOS edge significant and negative
+```
 
+Real output (the bundled CSV is synthetic — built so the OOS leg fails):
+
+```
+siga audit — siga-audit/examples/trades_sample.csv
+================================================================
+Full sample   n=120   mean=-6.89   (informational only — never the verdict)
+IS  (70%)      n=84    mean=+5.04   t=+0.89  p=0.3778
+OOS (30%)      n=36    mean=-34.75   t=-3.45  p=0.0015
+
+CHECK 01  OOS verdict ......... t=-3.45, p=0.0015 (significant)
+CHECK 02  Cost sensitivity .... gross edge -34.75/trade — already negative before any cost
+CHECK 03  Small-sample guard .. OOS n=36 >= 30 (ok)
+
+VERDICT: FAIL
+  - OOS edge significant and negative (t=-3.45, p=0.0015)
+```
+
+```bash
 siga audit your_trades.csv --cost-bps 10   # net of round-trip cost
 siga audit your_trades.csv --json          # machine-readable
 siga audit your_trades.csv --trail ~/.siga/audit.jsonl   # verdicts recorded, append-only
