@@ -24,6 +24,8 @@ MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
 
 ## Install
 
+Requires Python 3.11+.
+
 ```bash
 git clone https://github.com/c1-run/siga && cd siga
 pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing
@@ -77,7 +79,10 @@ The CSV needs one row per trade, chronological, with a P&L column
 ### Verdict rules (non-negotiable)
 
 - **Verdict comes from OOS only.** Full-sample numbers are informational.
-- **OOS n < 30 forces INCONCLUSIVE.** We would rather give no answer than a fake one.
+- **PASS** requires all three: OOS n ≥ 30, two-tailed p < 0.05, and a positive OOS mean.
+- **FAIL** requires OOS n ≥ 30 and a significantly negative OOS edge (p < 0.05).
+- **INCONCLUSIVE** covers everything else: OOS n < 30 (we would rather give no answer
+  than a fake one), or n ≥ 30 with p ≥ 0.05. No evidence of edge is not evidence of no edge.
 - **p-values are exact** (t-distribution via incomplete beta), not normal approximations.
 
 ## Quickstart — pull from a data source
@@ -120,6 +125,10 @@ Backtest tools hand you an equity curve and leave the judgment to you. We starte
 by auditing our own strategies first — four of them died under the audit
 (lookahead leaks, cost drag, overfit parameters), one survived. Every check in
 this toolchain exists because it killed something we believed in.
+
+Those reviews leaned on private forensics tooling — AST-level leak detection and
+multiple-testing penalties. What this repo ships is the out-of-sample / cost /
+sample-size part: the checks you can reproduce from a trade log.
 
 Verdicts are **PASS / FAIL / INCONCLUSIVE** — small samples force INCONCLUSIVE.
 No third kind of talk.
