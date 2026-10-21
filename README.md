@@ -60,10 +60,13 @@ CHECK 03  Small-sample guard .. OOS n=36 >= 30 (ok)
 
 VERDICT: FAIL
   - OOS edge significant and negative (t=-3.45, p=0.0015)
+
+note: verdict is gross of costs — use --cost or --cost-bps for net
 ```
 
 ```bash
-siga audit your_trades.csv --cost-bps 10   # net of round-trip cost
+siga audit your_trades.csv --cost 10       # net of a fixed per-trade cost
+siga audit your_trades.csv --cost-bps 10   # net of bps-of-notional (needs a notional column)
 siga audit your_trades.csv --json          # machine-readable
 siga audit your_trades.csv --trail ~/.siga/audit.jsonl   # verdicts recorded, append-only
 ```
@@ -138,13 +141,14 @@ siga audit whatever_you_ran.csv
 The closer analogy is a linter: `pylint` never runs your code, it judges it.
 `siga` never runs your strategy, it judges it.
 
-### Why the big projects can't give you a verdict
+### Why a verdict is the missing piece
 
-Neutral tools can't afford to say "your strategy is fake" — it alienates the
-users they depend on for adoption. Their business model rewards engagement; ours
-rewards being right. So the differentiation here isn't a cleverer statistic
-(OOS splits and t-tests are textbook). It's a discipline: **refusing to give a
-flattering answer**, especially the ones nobody wants to hear:
+Running strategies and judging them are different jobs. Engines are built to run
+strategies well — and judgment gets left to you, usually with the equity curve
+still glowing on screen. siga does only the second job. The differentiation here
+isn't a cleverer statistic (OOS splits and t-tests are textbook). It's a
+discipline: **refusing to give a flattering answer**, especially the ones nobody
+wants to hear:
 
 - `OOS n < 30` → INCONCLUSIVE. We would rather give no answer than a fake one.
 - The verdict comes from out-of-sample data only. Full-sample numbers are noise
@@ -164,9 +168,9 @@ So, plainly:
   discipline. Four of our own strategies died under them. That's not a confession
   — that's the product demo.
 - **Closed: whatever survived.** A strategy that passes the audit doesn't get
-  published; it gets traded. That asymmetry is the business model, and it's also
-  your quality guarantee: we charge for what survives, so we can't afford to go
-  easy on the grading.
+  published; it gets traded. That asymmetry is deliberate, and it's also your
+  quality guarantee: whatever we eventually charge for will be built on the
+  survivors, so the audit itself has no incentive to flatter anyone.
 
 One piece of advice, because it will save you the most money:
 

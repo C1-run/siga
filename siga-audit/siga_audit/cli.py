@@ -17,6 +17,7 @@ from siga_audit.audit import DEFAULT_MIN_OOS, DEFAULT_OOS_FRAC, AuditResult, run
 
 _PNL_CANDIDATES = ("pnl", "pnl_usd", "p&l", "profit", "net_pnl", "net", "return", "ret", "pl")
 _NOTIONAL_CANDIDATES = ("notional", "notional_usd", "trade_value", "value")
+_TIME_CANDIDATES = ("ts", "time", "timestamp", "date", "datetime")
 
 
 def _parse_number(raw: str) -> float:
@@ -47,10 +48,32 @@ def load_trades_csv(path: str, column: str | None = None) -> tuple[list[float], 
         if column and column not in reader.fieldnames:
             raise ValueError(f"column {column!r} not in CSV header: {reader.fieldnames}")
         notional_col = _pick_column(reader.fieldnames, _NOTIONAL_CANDIDATES)
+        ts_col = _pick_column(reader.fieldnames, _TIME_CANDIDATES)
+        prev_ts: float | str | None = None
+        ts_warned = False
 
         pnl: list[float] = []
         notional: list[float] = []
         for i, row in enumerate(reader, start=2):  # header is line 1
+            if ts_col and not ts_warned:
+                raw_ts = row.get(ts_col)
+                if raw_ts:
+                    try:
+                        cur_ts: float | str = float(raw_ts)
+                    except ValueError:
+                        cur_ts = raw_ts.strip()
+                    if (
+                        prev_ts is not None
+                        and isinstance(cur_ts, type(prev_ts))
+                        and cur_ts < prev_ts
+                    ):
+                        print(
+                            f"warning: {ts_col} column is not chronological "
+                            f"at line {i} — using row order as time",
+                            file=sys.stderr,
+                        )
+                        ts_warned = True
+                    prev_ts = cur_ts
             raw = row.get(pnl_col)
             try:
                 pnl.append(_parse_number(raw or ""))
@@ -124,6 +147,11 @@ def render_text(res: AuditResult, source: str, oos_frac: float) -> str:
     lines.append(f"VERDICT: {res.verdict}")
     for r in res.reasons:
         lines.append(f"  - {r}")
+    if res.assumed_cost is None:
+        lines.append("")
+        lines.append(
+            "note: verdict is gross of costs — use --cost or --cost-bps for net"
+        )
     return "\n".join(lines)
 
 
