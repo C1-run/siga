@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "siga-audit"
-version = "0.1.0"
+version = "0.2.0"
 description = "Backtest audit engine — out-of-sample verdict, cost sensitivity, small-sample guard. No third-party dependencies."
 readme = "README.md"
 license = {text = "MIT"}

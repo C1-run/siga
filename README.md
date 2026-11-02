@@ -7,6 +7,11 @@ Open-source core of the **siga** audit engine — Honesty / Reproducibility / Ve
 
 ![siga audit demo](docs/demo.gif)
 
+*(demo.gif is v0.1.0 output — CHECK 01 has since gained the cost/day basis and the
+verdict it prints can differ from this release's. Run `siga audit
+siga-audit/examples/plant_sample.csv --cost 30 --cluster-days --plant --stratum
+pullback` for the current shape.)*
+
 We audit trading strategies and publish verdicts, not curves. This repo is the free,
 MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
 
@@ -56,7 +61,7 @@ Full sample   n=120   mean=-6.89   (informational only — never the verdict)
 IS  (70%)      n=84    mean=+5.04   t=+0.89  p=0.3778
 OOS (30%)      n=36    mean=-34.75   t=-3.45  p=0.0015
 
-CHECK 01  OOS verdict ......... t=-3.45, p=0.0015 (significant)
+CHECK 01  OOS verdict (gross) ... t=-3.45, p=0.0015 (significant)
 CHECK 02  Cost sensitivity .... gross edge -34.75/trade — already negative before any cost
 CHECK 03  Small-sample guard .. OOS n=36 >= 30 (ok)
 
@@ -67,23 +72,64 @@ note: verdict is gross of costs — use --cost or --cost-bps for net
 ```
 
 ```bash
-siga audit your_trades.csv --cost 10       # net of a fixed per-trade cost
+siga audit your_trades.csv --cost 10       # the verdict is judged net of this
 siga audit your_trades.csv --cost-bps 10   # net of bps-of-notional (needs a notional column)
+siga audit your_trades.csv --cluster-days  # one day counts once, not fifty (needs a time column)
 siga audit your_trades.csv --json          # machine-readable
 siga audit your_trades.csv --trail ~/.siga/audit.jsonl   # verdicts recorded, append-only
 ```
 
+**Measure the doubt, not just the answer.** `--plant` injects a known edge into one
+labeled stratum and reports the smallest edge the log could have proved. It exists
+because `no edge found` and `no edge big enough to find here` are different answers:
+
+```bash
+# bundled CSV: 1,500 trades over 60 days, two arms, a thin gross edge a 30/trade
+# round trip eats
+siga audit siga-audit/examples/plant_sample.csv --cost 30 --cluster-days \
+      --plant --stratum pullback --deltas 0,10,20,30,40
+```
+
+Real output of that command:
+
+```
+PLANT — 'pullback': 750 of 1500 trades, net of 30.0000/trade, judged on 18 daily means
+ planted delta   judged n       mean        t         p  verdict
+        0.0000         18    -8.4558    -0.88    0.3888  INCONCLUSIVE
+       20.0000         18   +11.5442    +1.21    0.2438  INCONCLUSIVE
+       30.0000         18   +21.5442    +2.25    0.0377  PASS
+       40.0000         18   +31.5442    +3.30    0.0042  PASS
+control: the contrast leaves the whole-log mean where it found it (+13.7573 -> +13.7573) — the plant is only visible inside the stratum
+smallest planted edge this log can prove: 30.0000/trade — a FAIL/INCONCLUSIVE here only rules out edges bigger than that
+```
+
+The `control` line is the point: the plant lifts the stratum and takes the same
+total back out of the rest of the log, so the population mean cannot move. If a
+whole-log verdict *does* move, it was not the planted edge that moved it.
+
 The CSV needs one row per trade, chronological, with a P&L column
-(`pnl`, `profit`, `return`, … auto-detected, or `--column name`).
+(`pnl`, `profit`, `return`, … auto-detected, or `--column name`). For
+`--cluster-days`, a time column (`ts`, `time`, `exit_ms`, `date`, …); exit time is
+preferred over signal time when both exist, because an outcome is only a fact once
+it has settled. For `--plant`, a stratum column (`arm`, `label`, `symbol`, …).
 
 ### Verdict rules (non-negotiable)
 
 - **Verdict comes from OOS only.** Full-sample numbers are informational.
-- **PASS** requires all three: OOS n ≥ 30, two-tailed p < 0.05, and a positive OOS mean.
-- **FAIL** requires OOS n ≥ 30 and a significantly negative OOS edge (p < 0.05).
+- **Cost is part of the verdict, not a footnote.** With `--cost` / `--cost-bps`, the
+  verdict is judged on the net series; without it, gross. A gross edge that costs
+  more than it earns is not an edge, and it does not get a PASS.
+- **`--cluster-days` judges the day.** The statistic is read on per-UTC-day means and
+  floored at `--min-days` days: 50 trades that all settled on the same afternoon are
+  one observation, not fifty.
+- **PASS** requires all three: judged OOS n ≥ 30, two-tailed p < 0.05, and a positive
+  judged OOS mean.
+- **FAIL** requires judged OOS n ≥ 30 and a significantly negative judged edge (p < 0.05).
 - **INCONCLUSIVE** covers everything else: OOS n < 30 (we would rather give no answer
   than a fake one), or n ≥ 30 with p ≥ 0.05. No evidence of edge is not evidence of no edge.
 - **p-values are exact** (t-distribution via incomplete beta), not normal approximations.
+- **A verdict without a plant is uncalibrated.** If the ladder never reaches PASS, the
+  honest report is "this log cannot prove an edge that large" — not "there is none".
 
 ## Quickstart — pull from a data source
 

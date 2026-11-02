@@ -56,6 +56,30 @@ def test_cost_survives_edge():
     assert res.net_at_cost.mean == pytest.approx(20.0)
 
 
+def test_an_assumed_cost_moves_the_verdict():
+    # A strategy that loses money at the assumed cost cannot report PASS.
+    oos = [45.0 if i % 3 else -15.0 for i in range(36)]  # gross mean 25
+    assert run_audit(_series([1.0] * 84, oos)).verdict == "PASS"
+    res = run_audit(_series([1.0] * 84, oos), assumed_cost=30.0)  # net mean -5
+    assert res.verdict == "INCONCLUSIVE"
+    assert res.judged is not None
+    assert res.judged.mean == pytest.approx(-5.0)
+
+
+def test_a_cost_larger_than_the_edge_is_a_fail():
+    oos = [45.0 if i % 3 else -15.0 for i in range(36)]
+    res = run_audit(_series([1.0] * 84, oos), assumed_cost=55.0)  # net mean -30
+    assert res.verdict == "FAIL"
+
+
+def test_gross_stats_are_still_reported_alongside_the_net_verdict():
+    oos = [45.0 if i % 3 else -15.0 for i in range(36)]
+    res = run_audit(_series([1.0] * 84, oos), assumed_cost=30.0)
+    assert res.oos.mean == pytest.approx(25.0)  # gross, informational
+    assert res.breakeven_cost == pytest.approx(25.0)
+    assert res.to_dict()["judged_net"] is True
+
+
 def test_negative_full_sample_note():
     # Small OOS (withholds verdict) but full sample clearly negative.
     xs = [-20.0, -10.0, 5.0] * 20  # 60 trades, mean -8.3

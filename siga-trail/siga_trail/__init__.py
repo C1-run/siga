@@ -10,5 +10,5 @@ with per-record fsync and parameterized paths.
 
 from siga_trail.trail import Trail
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = ["Trail", "__version__"]

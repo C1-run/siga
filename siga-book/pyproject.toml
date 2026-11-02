@@ -1,6 +1,6 @@
 [project]
 name = "siga-book"
-version = "0.1.0"
+version = "0.2.0"
 description = "Single-frame L2 order book summaries. Zero dependencies."
 requires-python = ">=3.9"
 dependencies = []
