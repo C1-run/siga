@@ -1,6 +1,6 @@
 """Single-frame L2 order book summary.
 
-Ported from c1m/briefing/sources/tick.py::get_orderbook_summary.
+Ported from a closed internal order-book module.
 Split into a pure computation (summarize_book) and a thin fetch
 adapter (fetch_summary) so this package has zero dependencies and
 never touches the network.

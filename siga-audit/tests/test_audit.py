@@ -24,6 +24,8 @@ def test_fail_on_significant_negative_oos():
     oos = [-25.0 if i % 3 else 10.0 for i in range(36)]  # mean ~-13.3
     res = run_audit(_series([5.0, -5.0] * 42, oos))
     assert res.verdict == "FAIL"
+    # a p this small prints as tiny, never as 0.0000
+    assert any("p=<0.0001" in r for r in res.reasons)
 
 
 def test_small_sample_forces_inconclusive():

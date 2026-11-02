@@ -1,31 +1,37 @@
 # siga-cli v0.2.0 — unreleased
 
-## Three checks, each of which moved a verdict on a real log
+## Three checks, each of which moves a verdict on the bundled example log
 
-We pointed the auditor at a tape we already had four weeks of opinions about,
-and it disagreed with us for the wrong reasons. The numbers below are ours; the
-examples in the README are synthetic.
+Every number below comes from `siga-audit/examples/plant_sample.csv`, a synthetic
+1,500-trade log shipped in this repo. Four commands, and you have reproduced the
+whole release note — no log here is one we cannot show you.
 
 1. **Cost now enters the verdict.** `--cost` / `--cost-bps` used to append a line
    to the reasons and judge the verdict on gross: `--cost 1.0` — a per-trade cost
-   larger than any edge — still printed `PASS`. Now a cost that eats the edge
-   cannot produce a PASS. A real arm that used to read PASS now reads
-   INCONCLUSIVE, because the net edge is not significant.
+   larger than any edge — still printed `PASS`. On the bundled log, gross reads
+   `PASS (t=+2.28, p=0.0230)`; the same log `--cost 30` reads
+   `FAIL (t=-3.01, p=0.0028)`. A cost that eats the edge can no longer produce a
+   PASS.
 2. **`--cluster-days`: the day is the unit, not the ticket.** The statistic is
    read on per-UTC-day means of the OOS slice, floored at `--min-days` days
-   (default 10) instead of `--min-oos` tickets. A log of 1,000 trades whose every
-   win sits inside one day used to read `t=+7.7, p=2e-13 → PASS`; clustered it
-   reads nothing. On our real tape (tens of thousands of trades, ~50 settled
-   days) the same data went from INCONCLUSIVE to a FAIL *with evidence*:
-   `t=-3.23, p=0.0056` on 16 daily means, against `t=+1.25` per ticket gross.
+   (default 10) instead of `--min-oos` tickets. The 450 OOS trades that read
+   `PASS` per ticket read `INCONCLUSIVE (t=+1.88, p=0.0767)` on their 18 daily
+   means: 450 trades settling on 18 days are 18 observations, not 450. Add the
+   cost back and the same log is a `FAIL (t=-2.48, p=0.0237)`. The two checks ask
+   different questions — is the edge real across time, does it survive what it
+   costs to take — and a PASS that ignores either is a claim about the wrong
+   quantity.
 3. **`--plant`: the auditor audits itself.** Plant a known edge into one labeled
    stratum — a contrast, so the whole-log mean is left exactly where it was
-   found — and report the smallest planted edge this log can prove. Without it,
-   a FAIL is a claim about the market; with it you learn whether the verdict was
-   ever capable of seeing what it says it did not find. `no edge found` became
-   `no edge larger than a quarter of our risk unit at this sample` — and the
-   figure reproduced within 10% of a completely separate implementation of the
-   same protocol, which is the only reason we believe it.
+   found — and report the smallest planted edge this log can prove. On the
+   bundled stratum the first planted edge that reaches `PASS` is 30/trade, so a
+   FAIL there rules out anything larger than 30/trade and *nothing* smaller.
+   Without it, a FAIL is a claim about the market; with it you learn whether the
+   verdict was ever capable of seeing what it says it did not find.
+
+Also: a p-value below 1e-4 now prints as `<0.0001` in the verdict reasons instead
+of `0.0000`, and `docs/demo.gif` is generated from live CLI output by
+`docs/make_demo.py` — the demo can no longer drift from the release it advertises.
 
 Tests: 195 → 210 passing across all seven packages (1 pre-existing skip in
 siga-connect), on Python 3.12.
@@ -46,7 +52,7 @@ siga audit your_trades.csv
 
 ## What's in this release
 
-`siga-cli` is a Python monorepo with five packages. The one that matters most
+`siga-cli` is a Python monorepo with seven packages. The one that matters most
 is `siga-audit` — a zero-dependency backtest audit engine that splits your
 trade log into in-sample (70%) and out-of-sample (30%), judges **only the OOS
 portion**, and prints a verdict. No normal approximations, no hidden parameters.

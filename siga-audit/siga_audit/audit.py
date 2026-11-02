@@ -24,6 +24,11 @@ DEFAULT_MIN_OOS = 30
 DEFAULT_MIN_DAYS = 10
 
 
+def _fmt_p(p: float) -> str:
+    """A p-value never prints as zero — the tail is small, not absent."""
+    return "<0.0001" if p < 1e-4 else f"{p:.4f}"
+
+
 def daily_means(xs: list[float], days: list[int]) -> list[float]:
     """Mean of `xs` per day key, in first-seen order — the unit a clustered test reads.
 
@@ -169,19 +174,19 @@ def run_audit(
             verdict = "PASS"
             reasons.append(
                 f"OOS edge significant and positive "
-                f"(t={judged.t:+.2f}, p={judged.p:.4f})"
+                f"(t={judged.t:+.2f}, p={_fmt_p(judged.p)})"
             )
         else:
             verdict = "FAIL"
             reasons.append(
                 f"OOS edge significant and negative "
-                f"(t={judged.t:+.2f}, p={judged.p:.4f})"
+                f"(t={judged.t:+.2f}, p={_fmt_p(judged.p)})"
             )
     else:
         verdict = "INCONCLUSIVE"
         reasons.append(
             f"OOS not statistically significant "
-            f"(t={judged.t:+.2f}, p={judged.p:.4f} >= {ALPHA})"
+            f"(t={judged.t:+.2f}, p={_fmt_p(judged.p)} >= {ALPHA})"
         )
 
     if clustered:
@@ -198,12 +203,12 @@ def run_audit(
         elif net_at_cost.p >= ALPHA:
             reasons.append(
                 f"at assumed cost {assumed_cost:.4f}/trade the OOS edge survives "
-                f"but is no longer significant (net p={net_at_cost.p:.4f})"
+                f"but is no longer significant (net p={_fmt_p(net_at_cost.p)})"
             )
         else:
             reasons.append(
                 f"OOS edge survives assumed cost {assumed_cost:.4f}/trade "
-                f"(net t={net_at_cost.t:+.2f}, p={net_at_cost.p:.4f})"
+                f"(net t={net_at_cost.t:+.2f}, p={_fmt_p(net_at_cost.p)})"
             )
 
     if small_sample and full.p < ALPHA and full.mean < 0:

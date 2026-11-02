@@ -7,10 +7,8 @@ Open-source core of the **siga** audit engine — Honesty / Reproducibility / Ve
 
 ![siga audit demo](docs/demo.gif)
 
-*(demo.gif is v0.1.0 output — CHECK 01 has since gained the cost/day basis and the
-verdict it prints can differ from this release's. Run `siga audit
-siga-audit/examples/plant_sample.csv --cost 30 --cluster-days --plant --stratum
-pullback` for the current shape.)*
+*(the gif is generated from live CLI output — `python docs/make_demo.py` rebuilds
+it, so it cannot drift from the release it advertises.)*
 
 We audit trading strategies and publish verdicts, not curves. This repo is the free,
 MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
@@ -61,9 +59,9 @@ Full sample   n=120   mean=-6.89   (informational only — never the verdict)
 IS  (70%)      n=84    mean=+5.04   t=+0.89  p=0.3778
 OOS (30%)      n=36    mean=-34.75   t=-3.45  p=0.0015
 
-CHECK 01  OOS verdict (gross) ... t=-3.45, p=0.0015 (significant)
-CHECK 02  Cost sensitivity .... gross edge -34.75/trade — already negative before any cost
-CHECK 03  Small-sample guard .. OOS n=36 >= 30 (ok)
+CHECK 01  OOS verdict ........... t=-3.45, p=0.0015 (significant, gross per ticket)
+CHECK 02  Cost sensitivity ...... gross edge -34.75/trade — already negative before any cost
+CHECK 03  Small-sample guard .... OOS n=36 >= 30 (ok)
 
 VERDICT: FAIL
   - OOS edge significant and negative (t=-3.45, p=0.0015)
@@ -96,6 +94,7 @@ Real output of that command:
 PLANT — 'pullback': 750 of 1500 trades, net of 30.0000/trade, judged on 18 daily means
  planted delta   judged n       mean        t         p  verdict
         0.0000         18    -8.4558    -0.88    0.3888  INCONCLUSIVE
+       10.0000         18    +1.5442    +0.16    0.8736  INCONCLUSIVE
        20.0000         18   +11.5442    +1.21    0.2438  INCONCLUSIVE
        30.0000         18   +21.5442    +2.25    0.0377  PASS
        40.0000         18   +31.5442    +3.30    0.0042  PASS
@@ -163,6 +162,13 @@ siga portfolio brief                 # portfolio-aware daily briefing
 
 ```bash
 pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing siga-connect
+```
+
+The README's demo gif is a build artifact of the CLI, not a drawing:
+
+```bash
+pip install pillow        # dev-only; no siga package depends on it
+python docs/make_demo.py  # re-encodes docs/demo.gif from real `siga audit` output
 ```
 
 ## Why "verdict, not curves"

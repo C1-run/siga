@@ -1,7 +1,7 @@
 """Regression + boundary tests for siga_book.summary.
 
-Numeric expectations ported from c1m/tests/test_briefing.py::TestTickSource
-(mocked ccxt book). No network, no ccxt, no mocks — fake fetchers only.
+Numeric expectations ported from the closed internal reference tests (mocked
+ccxt book). No network, no ccxt, no mocks — fake fetchers only.
 """
 
 from siga_book import fetch_summary, summarize_book
@@ -20,7 +20,7 @@ def fake_fetcher(book):
     return fetch
 
 
-def test_regression_math_matches_c1m():
+def test_regression_math_matches_reference():
     result = fetch_summary(fake_fetcher(BOOK), "SOL/USDC", depth=2)
     assert result["symbol"] == "SOL/USDC"
     assert result["bid_price"] == 100.0
