@@ -13,27 +13,27 @@ export function Layout({ children }) {
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>siga — the backtest audit engine</title>
+        <title>siga — open-source backtest audit CLI</title>
         <meta
           name="description"
-          content="siga audits backtest trade logs: chronological OOS verdict, exact p-values, cost sensitivity, small-sample refusal. PASS / FAIL / INCONCLUSIVE — verdict, not curves."
+          content="siga is an open-source CLI for chronological trade logs. It judges the final 30% only and reports exact p-values, sample-size limits, and optional cost sensitivity."
         />
         {/* Open Graph / Twitter cards */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://siga.c1.run/" />
-        <meta property="og:title" content="siga — Your backtest is lying to you. We make it confess." />
+        <meta property="og:title" content="siga — open-source backtest audit CLI" />
         <meta
           property="og:description"
-          content="The backtest audit engine. Verdicts, not curves: PASS / FAIL / INCONCLUSIVE. Open-source CLI — measure before you build."
+          content="Audit chronological trade logs with an out-of-sample-only verdict, exact p-values, and optional cost sensitivity."
         />
         <meta property="og:image" content="https://siga.c1.run/og.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="siga — Your backtest is lying to you. We make it confess." />
+        <meta name="twitter:title" content="siga — open-source backtest audit CLI" />
         <meta
           name="twitter:description"
-          content="The backtest audit engine. Verdicts, not curves. Open-source CLI — measure before you build."
+          content="Audit chronological trade logs with an out-of-sample-only verdict, exact p-values, and optional cost sensitivity."
         />
         <meta name="twitter:image" content="https://siga.c1.run/og.png" />
         <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23070a09'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='bold' fill='%2300ff94' text-anchor='middle'%3Es%3C/text%3E%3C/svg%3E" />

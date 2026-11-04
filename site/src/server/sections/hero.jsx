@@ -6,28 +6,24 @@ export function Hero() {
     <section className="hero" id="hero">
       <div className="hero-meta">
         <span className="dot dot-sm dot-green animate-pulse"></span>
-        <span>AUDIT REPORT SUITE — INDEPENDENT VERIFICATION</span>
+        <span>OPEN-SOURCE BACKTEST AUDIT CLI</span>
       </div>
 
       <div className="hero-main">
         <h1 className="hero-title" id="hero-title">
           <span className="hero-line" id="hero-l1">
-            <span className="hero-3d-word" style={{ transitionDelay: '80ms' }}>Your</span>{' '}
-            <span className="hero-3d-word" style={{ transitionDelay: '160ms' }}>backtest</span>{' '}
-            <span className="hero-3d-word" style={{ transitionDelay: '240ms' }}>is</span>{' '}
-            <span className="hero-3d-word" style={{ transitionDelay: '320ms' }}>lying</span>{' '}
-            <span className="hero-3d-word" style={{ transitionDelay: '400ms' }}>to</span>{' '}
-            <span className="hero-3d-word" style={{ transitionDelay: '480ms' }}>you.</span>
+            <span className="hero-3d-word" style={{ transitionDelay: '80ms' }}>Audit</span>{' '}
+            <span className="hero-3d-word" style={{ transitionDelay: '160ms' }}>backtests</span>{' '}
+            <span className="hero-3d-word" style={{ transitionDelay: '240ms' }}>with</span>
           </span>
           <span className="hero-line hero-line-2" id="hero-l2" style={{ transitionDelay: '580ms' }}>
-            <span>We make it{' '}</span>
             <span className="confess">
-              confess.<span className="hero-underline" id="hero-underline"></span>
+              out-of-sample evidence.<span className="hero-underline" id="hero-underline"></span>
             </span>
           </span>
         </h1>
 
-        <p className="hero-sub" id="hero-sub">Strategy audit. Not signals. Not hope. Verdict.</p>
+        <p className="hero-sub" id="hero-sub">siga splits chronological trade logs 70/30; only the final 30% determines the verdict.</p>
 
         <div className="chip-row">
           <div className="verdict-chip-3d glass-card chip chip-pass" style={{ transitionDelay: '850ms' }}>
