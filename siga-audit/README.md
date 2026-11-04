@@ -27,5 +27,7 @@ Rules, non-negotiable:
   statement — it is an instrument limit.
 - OOS n < 30 forces `INCONCLUSIVE`. We would rather give no answer than a fake one.
 - p-values are exact (t-distribution via incomplete beta), not normal approximations.
+- `PASS` is not a profitability guarantee. It describes this log under the stated
+  audit assumptions and does not establish future returns.
 
 MIT — siga <team@c1.run>

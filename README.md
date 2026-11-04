@@ -123,6 +123,8 @@ it has settled. For `--plant`, a stratum column (`arm`, `label`, `symbol`, …).
   one observation, not fifty.
 - **PASS** requires all three: judged OOS n ≥ 30, two-tailed p < 0.05, and a positive
   judged OOS mean.
+- **PASS is not a profitability guarantee.** It describes this audit's result for
+  this trade log and its stated assumptions; it does not establish future returns.
 - **FAIL** requires judged OOS n ≥ 30 and a significantly negative judged edge (p < 0.05).
 - **INCONCLUSIVE** covers everything else: OOS n < 30 (we would rather give no answer
   than a fake one), or n ≥ 30 with p ≥ 0.05. No evidence of edge is not evidence of no edge.
@@ -230,8 +232,9 @@ So, plainly:
   — that's the product demo.
 - **Closed: whatever survived.** A strategy that passes the audit doesn't get
   published; it gets traded. That asymmetry is deliberate, and it's also your
-  quality guarantee: whatever we eventually charge for will be built on the
-  survivors, so the audit itself has no incentive to flatter anyone.
+  product strategy: whatever we eventually charge for will be built on the
+  survivors, so the audit itself has no incentive to flatter anyone. A PASS is
+  not proof of profitability or a promise about future performance.
 
 One piece of advice, because it will save you the most money:
 

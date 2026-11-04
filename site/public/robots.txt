@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://siga.c1.run/sitemap.xml

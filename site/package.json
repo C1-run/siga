@@ -1,0 +1,14 @@
+{
+  "name": "siga-landing",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "hono": "4.13.16"
+  },
+  "devDependencies": {
+    "wrangler": "4.83.0"
+  }
+}
