@@ -29,6 +29,8 @@ MIT-licensed core: the same plumbing we use in our quantitative research, plus t
 
 Requires Python 3.11+.
 
+> **Note on PyPI:** Not on PyPI. `pip install siga` installs an unrelated terminal progress-bar library that binds a conflicting `siga` command. Install from a local clone as shown below:
+
 ```bash
 git clone https://github.com/c1-run/siga && cd siga
 pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing
