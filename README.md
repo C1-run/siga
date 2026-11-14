@@ -11,7 +11,7 @@ Open-source core of the **siga** audit engine — Honesty / Reproducibility / Ve
 it, so it cannot drift from the release it advertises.)*
 
 We audit trading strategies and publish verdicts, not curves. This repo is the free,
-MIT-licensed core: the same plumbing we use in production, plus the `siga` CLI.
+MIT-licensed core: the same plumbing we use in our quantitative research, plus the `siga` CLI.
 
 ## Packages
 
@@ -114,7 +114,10 @@ it has settled. For `--plant`, a stratum column (`arm`, `label`, `symbol`, …).
 
 ### Verdict rules (non-negotiable)
 
-- **Verdict comes from OOS only.** Full-sample numbers are informational.
+- **Verdict comes from a single chronological 70/30 OOS split.** The trade log is
+  split strictly by timestamp into the first 70% in-sample and trailing 30% out-of-sample
+  (never randomized, shuffled, or cherry-picked). The verdict is evaluated strictly
+  on the trailing 30% OOS leg; full-sample numbers are informational only.
 - **Cost is part of the verdict, not a footnote.** With `--cost` / `--cost-bps`, the
   verdict is judged on the net series; without it, gross. A gross edge that costs
   more than it earns is not an edge, and it does not get a PASS.
@@ -128,7 +131,9 @@ it has settled. For `--plant`, a stratum column (`arm`, `label`, `symbol`, …).
 - **FAIL** requires judged OOS n ≥ 30 and a significantly negative judged edge (p < 0.05).
 - **INCONCLUSIVE** covers everything else: OOS n < 30 (we would rather give no answer
   than a fake one), or n ≥ 30 with p ≥ 0.05. No evidence of edge is not evidence of no edge.
-- **p-values are exact** (t-distribution via incomplete beta), not normal approximations.
+- **Exact Student's t p-values** (computed via the regularized incomplete beta function,
+  avoiding asymptotic normal approximations; exact under standard i.i.d. / near-normal
+  return assumptions).
 - **A verdict without a plant is uncalibrated.** If the ladder never reaches PASS, the
   honest report is "this log cannot prove an edge that large" — not "there is none".
 
@@ -216,8 +221,8 @@ wants to hear:
 - `OOS n < 30` → INCONCLUSIVE. We would rather give no answer than a fake one.
 - The verdict comes from out-of-sample data only. Full-sample numbers are noise
   dressed as evidence.
-- p-values are exact, not normal approximations — because small samples are
-  exactly where the lie usually hides.
+- p-values use the Student's t-distribution (via incomplete beta), not asymptotic
+  normal approximations — because small samples are where normal approximations break down.
 
 ### The uncomfortable question: why is any of this open source?
 
