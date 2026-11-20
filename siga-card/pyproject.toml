@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "siga-card"
+version = "0.1.0"
+description = "Pre-registered, frozen decision cards that export to siga audit. Zero dependencies."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "siga", email = "team@c1.run"}]
+requires-python = ">=3.11"
+keywords = ["audit", "pre-registration", "decision", "trading", "jsonl", "append-only"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = []
+
+[project.optional-dependencies]
+cli = ["siga-briefing"]
+
+[tool.setuptools.packages.find]
+include = ["siga_card*"]

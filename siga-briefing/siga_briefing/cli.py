@@ -299,6 +299,14 @@ def _parse_args(argv) -> argparse.Namespace:
 
     add_audit_parser(subparsers)
 
+    # Pre-registered decision cards (siga-card, optional)
+    try:
+        from siga_card.cli import add_card_parser
+
+        add_card_parser(subparsers)
+    except ImportError:
+        pass
+
     # Data source fetch (siga-connect, optional)
     fetch_p = subparsers.add_parser(
         "fetch", help="pull trade history from a data source into a CSV"
@@ -337,6 +345,10 @@ def _run(args) -> int:
         from siga_audit.cli import run_audit_cli
 
         return run_audit_cli(args)
+    if getattr(args, "command", None) == "card":
+        from siga_card.cli import run_card_cli
+
+        return run_card_cli(args)
     if args.command == "fetch":
         return _cmd_fetch(args)
 

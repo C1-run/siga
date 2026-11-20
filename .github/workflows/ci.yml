@@ -24,9 +24,9 @@ jobs:
 
       - name: Install packages
         run: |
-          pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-briefing -e ./siga-connect
+          pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-card -e ./siga-briefing -e ./siga-connect
           pip install pytest pytest-asyncio
 
       - name: Run tests
         run: |
-          pytest siga-common siga-core siga-book siga-trail siga-audit siga-briefing siga-connect
+          pytest siga-common siga-core siga-book siga-trail siga-audit siga-card siga-briefing siga-connect

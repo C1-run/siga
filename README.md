@@ -19,6 +19,7 @@ MIT-licensed core: the same plumbing we use in our quantitative research, plus t
 |---|---|
 | `siga-audit` | **Backtest audit engine** — OOS verdict, cost sensitivity, small-sample guard |
 | `siga-trail` | Append-only JSONL audit trail — verdicts are recorded, not just printed. Zero dependencies |
+| `siga-card` | **Pre-registered decision cards** — freeze direction/thesis/invalidation/target before entry; export settled cards to `siga audit`. Zero dependencies |
 | `siga-core` | Core types, SQLite state store, and async event bus |
 | `siga-common` | Lightweight utilities — logging, time, telemetry, test helpers |
 | `siga-book` | Single-frame L2 order book summaries. Zero dependencies |
@@ -33,7 +34,7 @@ Requires Python 3.11+.
 
 ```bash
 git clone https://github.com/c1-run/siga && cd siga
-pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-briefing
+pip install ./siga-common ./siga-core ./siga-book ./siga-trail ./siga-audit ./siga-card ./siga-briefing
 
 # optional: data source connectors (binance, dune, helius)
 pip install ./siga-connect
@@ -42,7 +43,7 @@ pip install ./siga-connect
 For development (editable installs + test tooling):
 
 ```bash
-pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-briefing
+pip install -e ./siga-common -e ./siga-core -e ./siga-book -e ./siga-trail -e ./siga-audit -e ./siga-card -e ./siga-briefing
 pip install pytest ruff
 ```
 
